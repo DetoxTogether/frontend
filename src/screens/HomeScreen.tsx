@@ -12,11 +12,6 @@ import {commonStyles} from '../utils/styles';
 const HomeScreen = ({navigation}: any) => {
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.greeting}>안녕하세요 👋</Text>
-        <Text style={styles.subtitle}>오늘도 함께 쉬어볼까요?</Text>
-      </View>
-
       {/* 오늘의 통계 */}
       <View style={styles.statsContainer}>
         <Text style={styles.sectionTitle}>오늘의 디톡스</Text>

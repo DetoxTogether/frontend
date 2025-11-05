@@ -6,7 +6,9 @@ import {
     ScrollView,
     TouchableOpacity,
 } from 'react-native';
-import {COLORS, SIZES} from '../utils/colors';
+import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {COLORS, SIZES, SHADOWS} from '../utils/colors';
 import {commonStyles} from '../utils/styles';
 
 const ChallengeScreen = ({navigation}: any) => {
@@ -14,171 +16,151 @@ const ChallengeScreen = ({navigation}: any) => {
     const challenges = [
         {
             id: '1',
-            friend: '김민재',
+            title: '블루마운틴 멀리건 골프클럽',
             status: 'active',
-            duration: 60,
-            timeLeft: 45,  // 이 줄 확인!
-            myScore: 5,
-            friendScore: 4,
+            duration: 180, // 3시간
+            date: '2025.08.29',
+            time: '15:00-18:00',
+            myScore: 72,
+            putts: 31,
+            gir: 68, // Green in Regulation
+            icon: 'weather-sunny',
+            iconColor: '#FFB800',
+            iconBg: '#FFF8E1',
         },
         {
             id: '2',
-            friend: '이현수',
+            title: '마운틴크릭 컨트리클럽',
             status: 'completed',
-            duration: 30,
-            timeLeft: 0,  // completed는 0으로
-            myScore: 7,
-            friendScore: 7,
+            duration: 120,
+            date: '2025.08.26',
+            time: '12:00-14:00',
+            myScore: 70,
+            putts: 29,
+            gir: 72,
+            icon: 'home-outline',
+            iconColor: '#00C896',
+            iconBg: '#E8F8F5',
+        },
+        {
+            id: '3',
+            title: '로얄가든 멤버쉽 현서리 컨트리클럽',
+            status: 'completed',
+            duration: 180,
+            date: '2025.08.24',
+            time: '09:00-12:00',
+            myScore: 76,
+            putts: 34,
+            gir: 60,
+            icon: 'partly-sunny-outline',
+            iconColor: '#FF9800',
+            iconBg: '#FFF3E0',
         },
     ];
 
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>챌린지 🏆</Text>
+                <View style={styles.headerTop}>
+                    <Text style={styles.title}>개인기록</Text>
+                    <View style={styles.pointBadge}>
+                        <MaterialIcon name="coin" size={20} color={COLORS.primary} />
+                        <Text style={styles.pointText}>980</Text>
+                    </View>
+                </View>
                 <Text style={styles.subtitle}>
-                    친구와 함께 디톡스 습관을 만들어가요
+                    월별 기록의 직관적 카드 UX
                 </Text>
             </View>
 
-            {/* 새 챌린지 만들기 */}
-            <TouchableOpacity style={styles.createButton}>
-                <Text style={styles.createButtonIcon}>➕</Text>
-                <View style={styles.createButtonContent}>
-                    <Text style={styles.createButtonTitle}>새 챌린지 만들기</Text>
-                    <Text style={styles.createButtonSubtitle}>
-                        친구와 1:1 디톡스 대결
-                    </Text>
-                </View>
-                <Text style={styles.createButtonArrow}>→</Text>
-            </TouchableOpacity>
+            {/* 탭 메뉴 */}
+            <View style={styles.tabContainer}>
+                <TouchableOpacity style={[styles.tab, styles.tabActive]}>
+                    <Text style={styles.tabTextActive}>월별 기록</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.tab}>
+                    <Text style={styles.tabText}>평균 기록</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.tab}>
+                    <Text style={styles.tabText}>베스트 기록</Text>
+                </TouchableOpacity>
+            </View>
 
-            {/* 진행 중인 챌린지 */}
+            {/* 이번 달 기록 */}
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>진행 중인 챌린지</Text>
-                {challenges
-                    .filter((c) => c.status === 'active')
-                    .map((challenge) => (
-                        <View key={challenge.id} style={styles.challengeCard}>
-                            <View style={styles.challengeHeader}>
-                                <View style={styles.friendInfo}>
-                                    <View style={styles.friendAvatar}>
-                                        <Text style={styles.friendAvatarText}>
-                                            {challenge.friend[0]}
-                                        </Text>
-                                    </View>
-                                    <View>
-                                        <Text style={styles.friendName}>{challenge.friend}</Text>
-                                        <Text style={styles.challengeDuration}>
-                                            {challenge.duration}분 디톡스
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={styles.badge}>
-                                    <Text style={styles.badgeText}>진행중</Text>
-                                </View>
-                            </View>
-
-                            {/* 점수 */}
-                            <View style={styles.scoreContainer}>
-                                <View style={styles.scoreBox}>
-                                    <Text style={styles.scoreLabel}>나</Text>
-                                    <Text style={styles.scoreValue}>{challenge.myScore}</Text>
-                                </View>
-                                <Text style={styles.scoreVs}>VS</Text>
-                                <View style={styles.scoreBox}>
-                                    <Text style={styles.scoreLabel}>상대</Text>
-                                    <Text style={styles.scoreValue}>
-                                        {challenge.friendScore}
-                                    </Text>
-                                </View>
-                            </View>
-
-                            {/* 프로그레스 */}
-                            <View style={styles.progressContainer}>
-                                <Text style={styles.progressLabel}>
-                                    남은 시간: {challenge.timeLeft}분
+                <View style={styles.sectionHeader}>
+                    <Text style={styles.sectionTitle}>2025년 8월</Text>
+                    <Text style={styles.sectionSubtitle}>총 5회</Text>
+                </View>
+                
+                {challenges.map((challenge) => (
+                    <TouchableOpacity 
+                        key={challenge.id} 
+                        style={styles.recordCard}
+                        activeOpacity={0.7}
+                    >
+                        {/* 헤더 */}
+                        <View style={styles.cardHeader}>
+                            <View style={styles.titleRow}>
+                                <Text style={styles.recordTitle} numberOfLines={1}>
+                                    {challenge.title}
                                 </Text>
-                                <View style={styles.progressBar}>
-                                    <View
-                                        style={[
-                                            styles.progressFill,
-                                            {
-                                                width: `${
-                                                    ((challenge.duration - challenge.timeLeft) /
-                                                        challenge.duration) *
-                                                    100
-                                                }%`,
-                                            },
-                                        ]}
+                                <View style={[styles.iconBadge, {backgroundColor: challenge.iconBg}]}>
+                                    <MaterialIcon 
+                                        name={challenge.icon} 
+                                        size={22} 
+                                        color={challenge.iconColor}
                                     />
                                 </View>
                             </View>
+                            <Text style={styles.recordDate}>
+                                {challenge.date} · {challenge.time}
+                            </Text>
                         </View>
-                    ))}
-            </View>
 
-            {/* 완료된 챌린지 */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>완료된 챌린지</Text>
-                {challenges
-                    .filter((c) => c.status === 'completed')
-                    .map((challenge) => (
-                        <View key={challenge.id} style={styles.challengeCard}>
-                            <View style={styles.challengeHeader}>
-                                <View style={styles.friendInfo}>
-                                    <View style={styles.friendAvatar}>
-                                        <Text style={styles.friendAvatarText}>
-                                            {challenge.friend[0]}
-                                        </Text>
-                                    </View>
-                                    <View>
-                                        <Text style={styles.friendName}>{challenge.friend}</Text>
-                                        <Text style={styles.challengeDuration}>
-                                            {challenge.duration}분 디톡스
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={[styles.badge, styles.badgeCompleted]}>
-                                    <Text style={styles.badgeText}>완료</Text>
-                                </View>
-                            </View>
-
-                            {/* 최종 점수 */}
-                            <View style={styles.scoreContainer}>
-                                <View style={styles.scoreBox}>
-                                    <Text style={styles.scoreLabel}>나</Text>
-                                    <Text style={styles.scoreValue}>{challenge.myScore}</Text>
-                                </View>
-                                <Text style={styles.scoreResult}>
-                                    {challenge.myScore === challenge.friendScore
-                                        ? '🤝 무승부'
-                                        : challenge.myScore > challenge.friendScore
-                                            ? '🎉 승리'
-                                            : '😢 패배'}
-                                </Text>
-                                <View style={styles.scoreBox}>
-                                    <Text style={styles.scoreLabel}>상대</Text>
-                                    <Text style={styles.scoreValue}>
-                                        {challenge.friendScore}
+                        {/* 통계 그리드 */}
+                        <View style={styles.statsGrid}>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>총 타수</Text>
+                                <View style={styles.statValueRow}>
+                                    <Text style={[styles.statValue, styles.statValuePrimary]}>
+                                        {challenge.myScore}
                                     </Text>
+                                    <Text style={styles.statUnit}>타</Text>
+                                </View>
+                            </View>
+                            <View style={styles.statDivider} />
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>퍼팅 수</Text>
+                                <View style={styles.statValueRow}>
+                                    <Text style={styles.statValue}>{challenge.putts}</Text>
+                                    <Text style={styles.statUnit}>퍼트</Text>
+                                </View>
+                            </View>
+                            <View style={styles.statDivider} />
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>그린 적중률</Text>
+                                <View style={styles.statValueRow}>
+                                    <Text style={[styles.statValue, styles.statValuePrimary]}>
+                                        {challenge.gir}
+                                    </Text>
+                                    <Text style={styles.statUnit}>%</Text>
                                 </View>
                             </View>
                         </View>
-                    ))}
+                    </TouchableOpacity>
+                ))}
             </View>
 
-            {/* 설명 카드 */}
+            {/* 카드 상세 설명 */}
             <View style={styles.infoCard}>
-                <Text style={styles.infoIcon}>💡</Text>
-                <View style={styles.infoContent}>
-                    <Text style={styles.infoTitle}>챌린지 규칙</Text>
-                    <Text style={styles.infoText}>
-                        • 정해진 시간 동안 앱을 사용하지 않으면 성공{'\n'}
-                        • 한 명이라도 중간에 사용하면 실패{'\n'}
-                        • 성공 시 포인트 획득 및 도장 적립
-                    </Text>
+                <View style={styles.infoHeader}>
+                    <MaterialIcon name="chart-line" size={24} color={COLORS.primary} />
+                    <Text style={styles.infoTitle}>카드 상세화면의 심화 기록 분석</Text>
                 </View>
+                <Text style={styles.infoText}>
+                    카드 상세화면에서는 개별 플레이 기록을 그래프로 시각화해 직관적으로 비교할 수 있으며, 평균 이상과 점진 평균 등의 기준을 함께 제공해 자신의 성과를 명확히 파악하고 개선 방향을 쉽게 찾을 수 있도록 돕습니다.
+                </Text>
             </View>
         </ScrollView>
     );
@@ -192,199 +174,185 @@ const styles = StyleSheet.create({
     header: {
         padding: SIZES.lg,
         paddingTop: SIZES.xl,
+        backgroundColor: COLORS.background,
+    },
+    headerTop: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: SIZES.xs,
     },
     title: {
         fontSize: SIZES.h2,
-        fontWeight: 'bold',
+        fontWeight: '700',
         color: COLORS.text,
-        marginBottom: SIZES.xs,
+    },
+    pointBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.white,
+        paddingHorizontal: SIZES.md,
+        paddingVertical: SIZES.sm,
+        borderRadius: SIZES.radiusFull,
+        ...SHADOWS.small,
+    },
+    pointText: {
+        fontSize: SIZES.bodyLarge,
+        fontWeight: '700',
+        color: COLORS.primary,
+        marginLeft: SIZES.xs,
     },
     subtitle: {
         fontSize: SIZES.body,
         color: COLORS.textLight,
+        lineHeight: 22,
     },
 
-    createButton: {
+    tabContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: COLORS.primary,
-        padding: SIZES.md,
-        margin: SIZES.md,
+        paddingHorizontal: SIZES.md,
+        marginBottom: SIZES.lg,
+        gap: SIZES.sm,
+    },
+    tab: {
+        paddingHorizontal: SIZES.md,
+        paddingVertical: SIZES.sm,
         borderRadius: SIZES.radiusMedium,
-        shadowColor: COLORS.black,
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        backgroundColor: COLORS.gray200,
     },
-    createButtonIcon: {
-        fontSize: 32,
-        marginRight: SIZES.md,
+    tabActive: {
+        backgroundColor: COLORS.text,
     },
-    createButtonContent: {
-        flex: 1,
-    },
-    createButtonTitle: {
-        fontSize: SIZES.body,
+    tabText: {
+        fontSize: SIZES.caption,
+        color: COLORS.textLight,
         fontWeight: '600',
-        color: COLORS.white,
-        marginBottom: 2,
     },
-    createButtonSubtitle: {
+    tabTextActive: {
         fontSize: SIZES.caption,
         color: COLORS.white,
-        opacity: 0.8,
-    },
-    createButtonArrow: {
-        fontSize: 24,
-        color: COLORS.white,
+        fontWeight: '700',
     },
 
     section: {
-        padding: SIZES.md,
+        paddingHorizontal: SIZES.md,
+        marginBottom: SIZES.lg,
     },
-    sectionTitle: {
-        fontSize: SIZES.h3,
-        fontWeight: '600',
-        color: COLORS.text,
-        marginBottom: SIZES.md,
-    },
-
-    challengeCard: {
-        backgroundColor: COLORS.white,
-        padding: SIZES.md,
-        borderRadius: SIZES.radiusMedium,
-        marginBottom: SIZES.md,
-        shadowColor: COLORS.black,
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    challengeHeader: {
+    sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: SIZES.md,
     },
-    friendInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    sectionTitle: {
+        fontSize: SIZES.h3,
+        fontWeight: '700',
+        color: COLORS.text,
     },
-    friendAvatar: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: COLORS.primary,
+    sectionSubtitle: {
+        fontSize: SIZES.caption,
+        color: COLORS.textLight,
+        fontWeight: '600',
+    },
+
+    recordCard: {
+        backgroundColor: COLORS.white,
+        borderRadius: SIZES.radiusLarge,
+        padding: SIZES.cardPadding,
+        marginBottom: SIZES.md,
+        ...SHADOWS.small,
+    },
+    cardHeader: {
+        marginBottom: SIZES.md,
+    },
+    titleRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: SIZES.xs,
+    },
+    recordTitle: {
+        fontSize: SIZES.bodyLarge,
+        fontWeight: '700',
+        color: COLORS.text,
+        flex: 1,
+        marginRight: SIZES.sm,
+    },
+    iconBadge: {
+        width: 40,
+        height: 40,
+        borderRadius: SIZES.radiusMedium,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: SIZES.md,
     },
-    friendAvatarText: {
-        fontSize: SIZES.h3,
-        fontWeight: 'bold',
-        color: COLORS.white,
-    },
-    friendName: {
-        fontSize: SIZES.body,
-        fontWeight: '600',
-        color: COLORS.text,
-        marginBottom: 2,
-    },
-    challengeDuration: {
+    recordDate: {
         fontSize: SIZES.caption,
         color: COLORS.textLight,
-    },
-    badge: {
-        backgroundColor: COLORS.warning,
-        paddingHorizontal: SIZES.md,
-        paddingVertical: SIZES.xs,
-        borderRadius: SIZES.radiusSmall,
-    },
-    badgeCompleted: {
-        backgroundColor: COLORS.success,
-    },
-    badgeText: {
-        fontSize: SIZES.caption,
-        fontWeight: '600',
-        color: COLORS.white,
+        fontWeight: '500',
     },
 
-    scoreContainer: {
+    statsGrid: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-around',
-        paddingVertical: SIZES.md,
+        paddingTop: SIZES.md,
         borderTopWidth: 1,
-        borderBottomWidth: 1,
-        borderColor: COLORS.gray200,
+        borderTopColor: COLORS.gray200,
     },
-    scoreBox: {
+    statItem: {
+        flex: 1,
         alignItems: 'center',
     },
-    scoreLabel: {
-        fontSize: SIZES.caption,
+    statDivider: {
+        width: 1,
+        height: 40,
+        backgroundColor: COLORS.gray200,
+    },
+    statLabel: {
+        fontSize: SIZES.small,
         color: COLORS.textLight,
         marginBottom: SIZES.xs,
+        fontWeight: '500',
     },
-    scoreValue: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: COLORS.primary,
+    statValueRow: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
     },
-    scoreVs: {
-        fontSize: SIZES.h3,
-        fontWeight: 'bold',
-        color: COLORS.textLight,
-    },
-    scoreResult: {
-        fontSize: SIZES.body,
-        fontWeight: '600',
+    statValue: {
+        fontSize: 24,
+        fontWeight: '700',
         color: COLORS.text,
     },
-
-    progressContainer: {
-        marginTop: SIZES.md,
+    statValuePrimary: {
+        color: COLORS.primary,
     },
-    progressLabel: {
-        fontSize: SIZES.caption,
+    statUnit: {
+        fontSize: SIZES.small,
         color: COLORS.textLight,
-        marginBottom: SIZES.xs,
-    },
-    progressBar: {
-        height: 8,
-        backgroundColor: COLORS.gray200,
-        borderRadius: 4,
-        overflow: 'hidden',
-    },
-    progressFill: {
-        height: '100%',
-        backgroundColor: COLORS.primary,
+        marginLeft: 2,
+        fontWeight: '600',
     },
 
     infoCard: {
-        flexDirection: 'row',
-        backgroundColor: COLORS.info + '20',
-        padding: SIZES.md,
-        margin: SIZES.md,
-        marginTop: 0,
+        backgroundColor: COLORS.white,
+        padding: SIZES.cardPadding,
+        marginHorizontal: SIZES.md,
         marginBottom: SIZES.xl,
-        borderRadius: SIZES.radiusMedium,
+        borderRadius: SIZES.radiusLarge,
         borderLeftWidth: 4,
-        borderLeftColor: COLORS.info,
+        borderLeftColor: COLORS.primary,
+        ...SHADOWS.small,
     },
-    infoIcon: {
-        fontSize: 24,
-        marginRight: SIZES.md,
-    },
-    infoContent: {
-        flex: 1,
+    infoHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: SIZES.sm,
     },
     infoTitle: {
-        fontSize: SIZES.body,
-        fontWeight: '600',
+        fontSize: SIZES.bodyLarge,
+        fontWeight: '700',
         color: COLORS.text,
-        marginBottom: SIZES.xs,
+        marginLeft: SIZES.sm,
+        flex: 1,
     },
     infoText: {
         fontSize: SIZES.caption,

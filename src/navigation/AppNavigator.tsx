@@ -11,7 +11,7 @@ import ChallengeScreen from '../screens/ChallengeScreen.tsx';
 import ProfileScreen from '../screens/ProfileScreen.tsx';
 
 import {COLORS, SIZES} from '../utils/colors';
-import {Text} from "react-native";
+import {Image, Text} from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -75,10 +75,11 @@ const TabNavigator = () => {
     return (
         <Tab.Navigator
             screenOptions={{
-        tabBarActiveTintColor: COLORS.primary,
-            tabBarInactiveTintColor: COLORS.textLight,
-            tabBarStyle: {
-            backgroundColor: COLORS.white,
+                tabBarShowLabel: false,
+                tabBarActiveTintColor: COLORS.primary,
+                tabBarInactiveTintColor: COLORS.textLight,
+                tabBarStyle: {
+                backgroundColor: COLORS.white,
                 borderTopWidth: 1,
                 borderTopColor: COLORS.gray200,
                 height: 60,
@@ -95,8 +96,14 @@ const TabNavigator = () => {
         name="Home"
     component={HomeStack}
     options={{
-        tabBarLabel: '홈',
-            tabBarIcon: ({color}) => <Text style={{fontSize: 24}}>🏠</Text>,
+        tabBarLabel: '',
+        tabBarIcon: ({ color, size }) => (
+            <Image
+                source={require('../assets/images/icon-home.png')}
+                style={{ width: size ?? 24, height: size ?? 24, tintColor: color }}
+                resizeMode="contain"
+            />
+        ),
     }}
     />
     <Tab.Screen
